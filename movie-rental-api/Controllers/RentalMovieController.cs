@@ -65,7 +65,7 @@ namespace movie_rental_api.Controllers
             {
                 ImdbId = createRentalMovieModel.ImdbId,
                 CustomerId = createRentalMovieModel.CustomerId,
-                RentalStartDate = DateTime.UtcNow,
+                RentalStartDate = createRentalMovieModel.RentalStartDate,
                 RentalEndDate = createRentalMovieModel.RentalEndDate
             };
 
