@@ -41,6 +41,10 @@ namespace movie_rental_api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateRentalMovie(CreateRentalMovieModel createRentalMovieModel)
         {
+
+            if (createRentalMovieModel.RentalStartDate >= createRentalMovieModel.RentalEndDate)
+                return BadRequest("data inicial do aluguel não pode ser menor ou igual ao prazo de entrega");
+
             var customer = _rentalContext.Customer.FirstOrDefault(x => x.CustomerId == createRentalMovieModel.CustomerId);
 
             if (customer == null)
@@ -81,7 +85,7 @@ namespace movie_rental_api.Controllers
             var rentalMovie = _rentalContext.RentalMovie.FirstOrDefault(x => x.RentalMovieId == rentalMovieId);
 
             if (rentalMovie == null)
-                return NotFound();
+                return NotFound("Não foi encontrado o aluguel para exclusão");
 
             _rentalContext.RentalMovie.Remove(rentalMovie);
             _rentalContext.SaveChanges();
