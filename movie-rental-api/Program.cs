@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using movie_rental_api.Context;
+using movie_rental_api.Services;
 
 namespace movie_rental_api;
 
@@ -12,6 +13,9 @@ public class Program
 
         builder.Services.AddDbContext<MovieRentalContext>(options =>
         options.UseInMemoryDatabase("Omdb-movies-rental"));
+
+        builder.Services.AddScoped<CustomerService>();
+        builder.Services.AddScoped<MovieRentalService>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using movie_rental_api.Context;
+using movie_rental_api.Exceptions;
 using movie_rental_api.Models;
-using Newtonsoft.Json;
+using movie_rental_api.Services;
 
 namespace movie_rental_api.Controllers
 {
@@ -9,23 +9,17 @@ namespace movie_rental_api.Controllers
     [ApiController]
     public class RentalMovieController : ControllerBase
     {
-        private string API_KEY = Environment.GetEnvironmentVariable("API_KEY");
-        private readonly MovieRentalContext _rentalContext;
-        private readonly HttpClient _httpClient;
+        private readonly MovieRentalService _movieRentalService;
 
-        public RentalMovieController(MovieRentalContext rentalContext)
+        public RentalMovieController(MovieRentalService movieRentalService)
         {
-            _rentalContext = rentalContext;
-            _httpClient = new HttpClient();
+            _movieRentalService = movieRentalService;
         }
 
         [HttpGet("Omdb/{movieName}")]
         public async Task<ActionResult> GetOmdbMoviesByName(string movieName)
         {
-            var request = await _httpClient.GetAsync($"https://www.omdbapi.com/?apikey={API_KEY}&type=movie&s={movieName}");
-            var jsonString = await request.Content.ReadAsStringAsync();
-
-            var response = JsonConvert.DeserializeObject<OmdbListModel>(jsonString);
+            var response = await _movieRentalService.GetOmdbMoviesByName(movieName);
 
             return Ok(response);
         }
@@ -33,7 +27,7 @@ namespace movie_rental_api.Controllers
         [HttpGet]
         public async Task<ActionResult> GetRentalMovies()
         {
-            var response = _rentalContext.RentalMovie.ToList();
+            var response = _movieRentalService.GetRentalMovies();
 
             return Ok(response);
         }
@@ -41,54 +35,26 @@ namespace movie_rental_api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateRentalMovie(CreateRentalMovieModel createRentalMovieModel)
         {
-
-            if (createRentalMovieModel.RentalStartDate >= createRentalMovieModel.RentalEndDate)
-                return BadRequest("data inicial do aluguel não pode ser menor ou igual ao prazo de entrega");
-
-            var customer = _rentalContext.Customer.FirstOrDefault(x => x.CustomerId == createRentalMovieModel.CustomerId);
-
-            if (customer == null)
-                return BadRequest("Cliente não encontrado, cadastre o cliente para alugar o filme");
-
-            var customerAge = DateTime.UtcNow.Year - customer.BirthDate.Year;
-
-            if (customerAge < 14)
-                return StatusCode(StatusCodes.Status403Forbidden, "cliente menor de 14 anos de idade não permitido");
-
-            var rentalMovie = _rentalContext.RentalMovie.FirstOrDefault(x => x.ImdbId == createRentalMovieModel.ImdbId);
-
-            if (rentalMovie != null)
-                return BadRequest("Filme Já alugado");
-
-            var customerList = _rentalContext.RentalMovie.Where(x => x.CustomerId == createRentalMovieModel.CustomerId).ToList();
-
-            if (customerList.Count >= 2)
-                return StatusCode(StatusCodes.Status403Forbidden, "cliente já possui 2 filmes alugados");
-
-            var model = new RentalMovie
+            try
             {
-                ImdbId = createRentalMovieModel.ImdbId,
-                CustomerId = createRentalMovieModel.CustomerId,
-                RentalStartDate = createRentalMovieModel.RentalStartDate,
-                RentalEndDate = createRentalMovieModel.RentalEndDate
-            };
+                var rentalMovie = _movieRentalService.CreateRentalMovie(createRentalMovieModel);
 
-            _rentalContext.Add(model);
-            _rentalContext.SaveChanges();
-
-            return Created($"v1/rental-movie/{model.RentalMovieId}", model);
+                return Created($"v1/rental-movie/{rentalMovie.RentalMovieId}", rentalMovie);
+            }
+            catch (ForbiddenException e)
+            {
+                return NotFound(new ForbiddenException(e.Message, e.Parameter));
+            }
+            catch (BadRequestException e)
+            {
+                return NotFound(new BadRequestException(e.Message, e.Parameter));
+            }
         }
 
         [HttpDelete("{rentalMovieId:int}")]
         public async Task<ActionResult> DeleteRentalMovie(int rentalMovieId)
         {
-            var rentalMovie = _rentalContext.RentalMovie.FirstOrDefault(x => x.RentalMovieId == rentalMovieId);
-
-            if (rentalMovie == null)
-                return NotFound("Não foi encontrado o aluguel para exclusão");
-
-            _rentalContext.RentalMovie.Remove(rentalMovie);
-            _rentalContext.SaveChanges();
+            _movieRentalService.DeleteRentalMovie(rentalMovieId);
 
             return NoContent();
         }
