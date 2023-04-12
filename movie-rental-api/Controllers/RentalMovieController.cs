@@ -43,11 +43,11 @@ namespace movie_rental_api.Controllers
             }
             catch (ForbiddenException e)
             {
-                return NotFound(new ForbiddenException(e.Message, e.Parameter));
+                return BadRequest(new ForbiddenException(e.Message, e.Parameter));
             }
             catch (BadRequestException e)
             {
-                return NotFound(new BadRequestException(e.Message, e.Parameter));
+                return BadRequest(new BadRequestException(e.Message, e.Parameter));
             }
         }
 
