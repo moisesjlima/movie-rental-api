@@ -41,7 +41,7 @@ namespace movie_rental_api.Services
         {
             var emailAlreadyExist = _rentalContext.Customer.FirstOrDefault(x => x.Email == createCustomerModel.Email);
             if (emailAlreadyExist != null)
-                throw new ConflictException("customer email already registered", "customer.email_already_exist");
+                throw new ConflictException("email já cadastrado", "customer.email_already_exist");
 
             var customer = new Customer
             {
@@ -81,6 +81,5 @@ namespace movie_rental_api.Services
             _rentalContext.Remove(customer);
             _rentalContext.SaveChanges();
         }
-
     }
 }

@@ -43,7 +43,7 @@ namespace movie_rental_api.Controllers
             }
             catch (ForbiddenException e)
             {
-                return BadRequest(new ForbiddenException(e.Message, e.Parameter));
+                return StatusCode(StatusCodes.Status403Forbidden, new ForbiddenException(e.Message, e.Parameter));
             }
             catch (BadRequestException e)
             {
@@ -54,9 +54,16 @@ namespace movie_rental_api.Controllers
         [HttpDelete("{rentalMovieId:int}")]
         public async Task<ActionResult> DeleteRentalMovie(int rentalMovieId)
         {
-            _movieRentalService.DeleteRentalMovie(rentalMovieId);
+            try
+            {
+                _movieRentalService.DeleteRentalMovie(rentalMovieId);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new NotFoundException(e.Message, e.Parameter));
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace movie_rental_api.Services
         public RentalMovie CreateRentalMovie(CreateRentalMovieModel createRentalMovieModel)
         {
             if (createRentalMovieModel.RentalStartDate >= createRentalMovieModel.RentalEndDate)
-                throw new ForbiddenException("data inicial do aluguel não pode ser menor ou igual ao prazo de entrega", "rentalMovie.bad_request");
+                throw new ForbiddenException("data inicial do aluguel não pode ser maior ou igual ao prazo de entrega", "rentalMovie.bad_request");
 
             var customer = _rentalContext.Customer.FirstOrDefault(x => x.CustomerId == createRentalMovieModel.CustomerId);
 

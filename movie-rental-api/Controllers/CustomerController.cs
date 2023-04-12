@@ -100,7 +100,7 @@ namespace movie_rental_api.Controllers
             }
             catch (ForbiddenException e)
             {
-                return BadRequest(new ForbiddenException(e.Message, e.Parameter));
+                return StatusCode(StatusCodes.Status403Forbidden, new ForbiddenException(e.Message, e.Parameter));
             }
         }
     }
