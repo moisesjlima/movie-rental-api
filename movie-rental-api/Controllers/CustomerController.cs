@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using movie_rental_api.Context;
+using movie_rental_api.Exceptions;
 using movie_rental_api.Models;
+using movie_rental_api.Services;
 
 namespace movie_rental_api.Controllers
 {
@@ -8,16 +10,16 @@ namespace movie_rental_api.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly MovieRentalContext _rentalContext;
-        public CustomerController(MovieRentalContext rentalContext)
+        private readonly CustomerService _customerServices;
+        public CustomerController(CustomerService customerService)
         {
-            _rentalContext = rentalContext;
+            _customerServices = customerService;
         }
 
         [HttpGet]
         public async Task<ActionResult> GetCustomers()
         {
-            var customerList = _rentalContext.Customer.ToList();
+            var customerList = _customerServices.GetCustomers();
 
             return Ok(customerList);
         }
@@ -25,75 +27,81 @@ namespace movie_rental_api.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult> GetCustomersByName(string name)
         {
-            var customerList = _rentalContext.Customer.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
-            if (customerList.Count <= 0)
-                return NotFound("Nenhum cliente encontrado pelo nome");
+            try
+            {
+                var customerList = _customerServices.GetCustomersByName(name);
 
-            return Ok(customerList);
+                return Ok(customerList);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new NotFoundException(e.Message, e.Parameter));
+            }
         }
 
         [HttpGet("{customerId:int}")]
         public async Task<ActionResult<Customer>> GetCustomerById(int customerId)
         {
-            var customer = _rentalContext.Customer.FirstOrDefault(x => x.CustomerId == customerId);
-            if (customer == null)
-                return NotFound("Cliente não encontrado");
+            try
+            {
+                var customerList = _customerServices.GetCustomerById(customerId);
 
-            return customer;
+                return Ok(customerList);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new NotFoundException(e.Message, e.Parameter));
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreateCustomerModel>> CreateCustomer(CreateCustomerModel createCustomerModel)
+        public async Task<ActionResult<Customer>> CreateCustomer(CreateCustomerModel createCustomerModel)
         {
-            var emailAlreadyExist = _rentalContext.Customer.FirstOrDefault(x => x.Email == createCustomerModel.Email);
-            if (emailAlreadyExist != null)
-                return Conflict("Email já cadastrado");
-
-            var customer = new Customer
+            try
             {
-                Name = createCustomerModel.Name,
-                CPF = createCustomerModel.CPF,
-                BirthDate = createCustomerModel.BirthDate,
-                Email = createCustomerModel.Email,
-                TelephoneNumber = createCustomerModel.TelephoneNumber,
-            };
+                var customer = _customerServices.CreateCustomer(createCustomerModel);
 
-            _rentalContext.Customer.Add(customer);
+                return Created($"v1/customer/{customer.CustomerId}", customer);
+            }
+            catch (ConflictException e)
+            {
+                return Conflict(new ConflictException(e.Message, e.Parameter));
+            }
 
-            _rentalContext.SaveChanges();
-
-            return Created($"v1/customer/{customer.CustomerId}", customer);
         }
 
         [HttpPatch("telephone-number")]
         public async Task<ActionResult<Customer>> UpdateCustomerTelephoneNumber(UpdateCustomerPhoneNumberModel updateCustomerNumberModel)
         {
-            var customer = _rentalContext.Customer.FirstOrDefault(x => x.CustomerId == updateCustomerNumberModel.CustomerId);
-            if (customer == null)
-                return NotFound("Cliente não encontrado");
+            try
+            {
+                var customer = _customerServices.UpdateCustomerTelephoneNumber(updateCustomerNumberModel);
 
-            customer.TelephoneNumber = updateCustomerNumberModel.TelephoneNumber;
-            _rentalContext.SaveChanges();
-
-            return Ok(customer);
+                return Ok(customer);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new NotFoundException(e.Message, e.Parameter));
+            }
         }
 
         [HttpDelete("{customerId:int}")]
         public async Task<ActionResult> DeleteCustomer(int customerId)
         {
-            var customer = _rentalContext.Customer.FirstOrDefault(x => x.CustomerId == customerId);
-            if (customer == null)
-                return NotFound("Cliente não encontrado");
+            try
+            {
+                _customerServices.DeleteCustomer(customerId);
 
-            var customerMovieRent = _rentalContext.RentalMovie.Any(x => x.CustomerId == customer.CustomerId);
-
-            if (customerMovieRent)
-                return StatusCode(StatusCodes.Status403Forbidden, "Cliente possui filme alugado, não é possivel deletar");
-
-            _rentalContext.Remove(customer);
-            _rentalContext.SaveChanges();
-
-            return NoContent();
+                return NoContent();
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new NotFoundException(e.Message, e.Parameter));
+            }
+            catch (ForbiddenException e)
+            {
+                return NotFound(new ForbiddenException(e.Message, e.Parameter));
+            }
         }
     }
 }
