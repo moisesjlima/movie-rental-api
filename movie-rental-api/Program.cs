@@ -3,7 +3,6 @@ using movie_rental_api.Context;
 using movie_rental_api.Services;
 
 namespace movie_rental_api;
-
 public class Program
 {
     public static void Main(string[] args)

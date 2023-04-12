@@ -7,19 +7,19 @@ namespace movie_rental_api.Services
 {
     public class MovieRentalService
     {
-        private string API_KEY = Environment.GetEnvironmentVariable("API_KEY");
+        readonly string API_KEY = Environment.GetEnvironmentVariable("API_KEY");
         private readonly MovieRentalContext _rentalContext;
-        private readonly HttpClient _httpClient;
 
         public MovieRentalService(MovieRentalContext rentalContext)
         {
             _rentalContext = rentalContext;
-            _httpClient = new HttpClient();
         }
 
         public async Task<OmdbListModel> GetOmdbMoviesByName(string movieName)
         {
-            var request = await _httpClient.GetAsync($"https://www.omdbapi.com/?apikey={API_KEY}&type=movie&s={movieName}");
+            var httpClient = new HttpClient();
+
+            var request = await httpClient.GetAsync($"https://www.omdbapi.com/?apikey={API_KEY}&type=movie&s={movieName}");
             var jsonString = await request.Content.ReadAsStringAsync();
 
             var response = JsonConvert.DeserializeObject<OmdbListModel>(jsonString);
