@@ -1,0 +1,370 @@
+{
+	"info": {
+		"_postman_id": "684d3e8d-b6e4-4bba-ab81-2648b97c7780",
+		"name": "movie-rental-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26082788"
+	},
+	"item": [
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Get Customer",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvcmdlQGdtYWlsLmNvbSIsIm1ldVBldCI6InBpcG9jYSIsImp0aSI6ImVjODQ2ZjI0LTU5YzYtNDEzZS1hZjU3LThkODE2NzliZDc0ZSIsImV4cCI6MTY4MTMyOTMwOSwiaXNzIjoiTW9pc2VzX0lzc3VlciIsImF1ZCI6Ik1vaXNlc19BdWRpZW5jZSJ9.eUfO1IvU7WFOlmoh2HdyI9NQGlyq5lfhfYBorQrM-qw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7080/v1/customer",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer By Name",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvcmdlQGdtYWlsLmNvbSIsIm1ldVBldCI6InBpcG9jYSIsImp0aSI6ImVjODQ2ZjI0LTU5YzYtNDEzZS1hZjU3LThkODE2NzliZDc0ZSIsImV4cCI6MTY4MTMyOTMwOSwiaXNzIjoiTW9pc2VzX0lzc3VlciIsImF1ZCI6Ik1vaXNlc19BdWRpZW5jZSJ9.eUfO1IvU7WFOlmoh2HdyI9NQGlyq5lfhfYBorQrM-qw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7080/v1/customer?name=Jorge",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"customer"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Jorge"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvcmdlQGdtYWlsLmNvbSIsIm1ldVBldCI6InBpcG9jYSIsImp0aSI6ImVjODQ2ZjI0LTU5YzYtNDEzZS1hZjU3LThkODE2NzliZDc0ZSIsImV4cCI6MTY4MTMyOTMwOSwiaXNzIjoiTW9pc2VzX0lzc3VlciIsImF1ZCI6Ik1vaXNlc19BdWRpZW5jZSJ9.eUfO1IvU7WFOlmoh2HdyI9NQGlyq5lfhfYBorQrM-qw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7080/v1/customer/1\n",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"customer",
+								"1\n"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvcmdlQGdtYWlsLmNvbSIsIm1ldVBldCI6InBpcG9jYSIsImp0aSI6ImVjODQ2ZjI0LTU5YzYtNDEzZS1hZjU3LThkODE2NzliZDc0ZSIsImV4cCI6MTY4MTMyOTMwOSwiaXNzIjoiTW9pc2VzX0lzc3VlciIsImF1ZCI6Ik1vaXNlc19BdWRpZW5jZSJ9.eUfO1IvU7WFOlmoh2HdyI9NQGlyq5lfhfYBorQrM-qw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7080/v1/customer/1\n",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"customer",
+								"1\n"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvcmdlQGdtYWlsLmNvbSIsIm1ldVBldCI6InBpcG9jYSIsImp0aSI6ImVjODQ2ZjI0LTU5YzYtNDEzZS1hZjU3LThkODE2NzliZDc0ZSIsImV4cCI6MTY4MTMyOTMwOSwiaXNzIjoiTW9pc2VzX0lzc3VlciIsImF1ZCI6Ik1vaXNlc19BdWRpZW5jZSJ9.eUfO1IvU7WFOlmoh2HdyI9NQGlyq5lfhfYBorQrM-qw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Jorge\",\r\n    \"cpf\": \"123.432.003-51\",\r\n    \"birthDate\": \"1999-06-10T23:56:38.696Z\",\r\n    \"email\": \"jorge@mail.com\",\r\n    \"telephoneNumber\": \"(11) 4343-5454\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7080/v1/customer",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer Telephone",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvcmdlQGdtYWlsLmNvbSIsIm1ldVBldCI6InBpcG9jYSIsImp0aSI6ImVjODQ2ZjI0LTU5YzYtNDEzZS1hZjU3LThkODE2NzliZDc0ZSIsImV4cCI6MTY4MTMyOTMwOSwiaXNzIjoiTW9pc2VzX0lzc3VlciIsImF1ZCI6Ik1vaXNlc19BdWRpZW5jZSJ9.eUfO1IvU7WFOlmoh2HdyI9NQGlyq5lfhfYBorQrM-qw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"customerId\": 1,\r\n  \"telephoneNumber\": \"(11) 4743-5412\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7080/v1/customer/1/telephone-number",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"customer",
+								"1",
+								"telephone-number"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RentalMovie",
+			"item": [
+				{
+					"name": "Get Omdb Movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7080/v1/rental-movie/search?movieName=Bruce Lee",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"rental-movie",
+								"search"
+							],
+							"query": [
+								{
+									"key": "movieName",
+									"value": "Bruce Lee"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Rental Movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7080/v1/rental-movie",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"rental-movie"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Rental Movie",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7080/v1/rental-movie/2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"rental-movie",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Rental Movie",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"imdbId\": \"tt50384hfghfghgh\",\r\n  \"customerId\": 1,\r\n  \"rentalStartDate\": \"2023-03-13T12:42:36.436Z\",\r\n  \"rentalEndDate\": \"2023-04-14T12:42:36.436Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7080/v1/rental-movie",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7080",
+							"path": [
+								"v1",
+								"rental-movie"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
