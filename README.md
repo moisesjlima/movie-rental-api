@@ -6,6 +6,7 @@ POC para testar os conhecimentos
 * A API do IMDB, Acessado via o site: http://www.omdbapi.com/, gerei a api_key para conectar na api conforme documentação em "Usage"
 * Utilizei a versão 6.0 do.NET
 * Utilizei o ORM [Entity Framework](https://learn.microsoft.com/pt-br/ef/) e banco de dados em memória
+* Swagger está habilitado, utilizei para realizar os testes
 * Utilizei o [Linq](https://learn.microsoft.com/pt-br/dotnet/csharp/programming-guide/concepts/linq/) para fazer as buscas e filtros
 
 ### APP:
