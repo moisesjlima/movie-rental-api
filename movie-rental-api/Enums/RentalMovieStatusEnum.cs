@@ -5,10 +5,10 @@ namespace movie_rental_api.Enums
     public enum RentalMovieStatusEnum
     {
         [Description("ativo")]
-        ATIVO = 1,
+        ACTIVE = 1,
         [Description("encerrado")]
-        ENCERRADO = 2,
+        FINISHED = 2,
         [Description("atrasado")]
-        ATRASADO = 3
+        OVERDUE = 3
     }
 }

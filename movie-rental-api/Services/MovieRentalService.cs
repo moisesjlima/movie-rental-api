@@ -39,7 +39,7 @@ namespace movie_rental_api.Services
             return rentalMovieList;
         }
 
-        public RentalMovie CreateRentalMovie(CreateRentalMovieModel createRentalMovieModel)
+        public async Task<RentalMovie> CreateRentalMovieAsync(CreateRentalMovieModel createRentalMovieModel)
         {
             if (createRentalMovieModel.RentalStartDate >= createRentalMovieModel.RentalEndDate)
                 throw new ForbiddenException("data inicial do aluguel não pode ser maior ou igual ao prazo de entrega", "rentalMovie.bad_request");
@@ -59,7 +59,7 @@ namespace movie_rental_api.Services
             if (rentalMovie != null)
                 throw new BadRequestException("Filme já alugado", "rentalMovie.movie_already_rented");
 
-            requestOmdb(createRentalMovieModel.ImdbId);
+            await requestOmdb(createRentalMovieModel.ImdbId);
 
             var customerList = _rentalContext.RentalMovie.Where(x => x.CustomerId == createRentalMovieModel.CustomerId).ToList();
 
@@ -70,7 +70,7 @@ namespace movie_rental_api.Services
             {
                 ImdbId = createRentalMovieModel.ImdbId,
                 CustomerId = createRentalMovieModel.CustomerId,
-                Status = RentalMovieStatusEnum.ATIVO,
+                Status = RentalMovieStatusEnum.ACTIVE,
                 RentalStartDate = createRentalMovieModel.RentalStartDate.Date,
                 RentalEndDate = createRentalMovieModel.RentalEndDate.Date
             };
@@ -81,15 +81,13 @@ namespace movie_rental_api.Services
             return model;
         }
 
-        public async Task<OmdbListModel> requestOmdb(string imdbId)
+        public async Task requestOmdb(string imdbId)
         {
             var request = await _httpClient.GetAsync($"https://www.omdbapi.com/?apikey={API_KEY}&type=movie&i={imdbId}");
             var jsonString = await request.Content.ReadAsStringAsync();
             var response = JsonConvert.DeserializeObject<OmdbListModel>(jsonString);
             if (!response.Response)
-                throw new BadRequestException("Cliente não encontrado, cadastre o cliente para alugar o filme", "rentalMovie.bad_request");
-
-            return response;
+                throw new BadRequestException("filme não encontrado pelo id para locação", "rentalMovie.not_found");
         }
 
         public void RemoveRentalMovie(int rentalMovieId)
@@ -99,10 +97,10 @@ namespace movie_rental_api.Services
             if (rentalMovie == null)
                 throw new NotFoundException("Não foi encontrado o aluguel para exclusão", "rentalMovie.not_found");
 
-            if (rentalMovie.Status != RentalMovieStatusEnum.ENCERRADO)
+            if (rentalMovie.Status != RentalMovieStatusEnum.FINISHED)
                 throw new BadRequestException("Não é possível remover o aluguel pois encontra-se ativo ou atrasado", "rentalMovie.not_allowed_to_deleted");
 
-            rentalMovie.Status = RentalMovieStatusEnum.ENCERRADO;
+            rentalMovie.Status = RentalMovieStatusEnum.FINISHED;
             _rentalContext.SaveChanges();
         }
     }

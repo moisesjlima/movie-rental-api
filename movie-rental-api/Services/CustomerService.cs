@@ -1,4 +1,5 @@
 ﻿using movie_rental_api.Context;
+using movie_rental_api.Enums;
 using movie_rental_api.Exceptions;
 using movie_rental_api.Models;
 
@@ -78,7 +79,7 @@ namespace movie_rental_api.Services
         {
             var customer = GetCustomerById(customerId);
 
-            var customerMovieRent = _rentalContext.RentalMovie.Any(x => x.CustomerId == customer.CustomerId);
+            var customerMovieRent = _rentalContext.RentalMovie.Any(x => x.CustomerId == customer.CustomerId && x.Status != RentalMovieStatusEnum.FINISHED);
 
             if (customerMovieRent)
                 throw new ForbiddenException("Cliente possui filme alugado, não é possivel deletar", "customer.cannot_be_deleted");

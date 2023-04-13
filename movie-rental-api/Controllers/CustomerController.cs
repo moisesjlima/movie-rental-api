@@ -22,6 +22,7 @@ namespace movie_rental_api.Controllers
             try
             {
                 IEnumerable<Customer> customerList;
+
                 if (!string.IsNullOrEmpty(name))
                     customerList = _customerServices.GetCustomersByName(name);
                 else
@@ -66,11 +67,14 @@ namespace movie_rental_api.Controllers
 
         }
 
-        [HttpPatch("telephone-number")]
-        public async Task<ActionResult<Customer>> UpdateCustomerTelephoneNumber(UpdateCustomerPhoneNumberModel updateCustomerNumberModel)
+        [HttpPatch("{customerId:int}/telephone-number")]
+        public async Task<ActionResult<Customer>> UpdateCustomerTelephoneNumber(int customerId, UpdateCustomerPhoneNumberModel updateCustomerNumberModel)
         {
             try
             {
+                if (customerId != updateCustomerNumberModel.CustomerId)
+                    return BadRequest(new BadRequestException("id da uri diferente do passado no corpo", "customer.bad_request"));
+
                 var customer = _customerServices.UpdateCustomerTelephoneNumber(updateCustomerNumberModel);
 
                 return Ok(customer);

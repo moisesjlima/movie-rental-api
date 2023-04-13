@@ -16,7 +16,7 @@ namespace movie_rental_api.Controllers
             _movieRentalService = movieRentalService;
         }
 
-        [HttpGet("Omdb")]
+        [HttpGet("search")]
         public async Task<ActionResult> GetOmdbMoviesByName([FromQuery] string movieName)
         {
             try
@@ -44,7 +44,7 @@ namespace movie_rental_api.Controllers
         {
             try
             {
-                var rentalMovie = _movieRentalService.CreateRentalMovie(createRentalMovieModel);
+                var rentalMovie = await _movieRentalService.CreateRentalMovieAsync(createRentalMovieModel);
 
                 return Created($"v1/rental-movie/{rentalMovie.RentalMovieId}", rentalMovie);
             }
@@ -59,7 +59,7 @@ namespace movie_rental_api.Controllers
         }
 
         [HttpDelete("{rentalMovieId:int}")]
-        public async Task<ActionResult> DeleteRentalMovie(int rentalMovieId)
+        public async Task<ActionResult> RemoveRentalMovie(int rentalMovieId)
         {
             try
             {
