@@ -23,7 +23,7 @@ namespace movie_rental_api.Services
         {
             var customerList = _rentalContext.Customer.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
             if (customerList.Count <= 0)
-                throw new NotFoundException("Nenhum cliente encontrado pelo nome", "customer.not_found");
+                throw new NotFoundException("nenhum cliente encontrado pelo nome", "customer.not_found");
 
             return customerList;
         }
@@ -32,13 +32,17 @@ namespace movie_rental_api.Services
         {
             var customer = _rentalContext.Customer.FirstOrDefault(x => x.CustomerId == customerId);
             if (customer == null)
-                throw new NotFoundException("Nenhum cliente encontrado pelo id", "customer.not_found");
+                throw new NotFoundException("nenhum cliente encontrado pelo id", "customer.not_found");
 
             return customer;
         }
 
         public Customer CreateCustomer(CreateCustomerModel createCustomerModel)
         {
+            var cpfAlreadyExist = _rentalContext.Customer.FirstOrDefault(x => x.CPF == createCustomerModel.CPF);
+            if (cpfAlreadyExist != null)
+                throw new ConflictException("cpf já cadastrado", "customer.cpf_already_exist");
+
             var emailAlreadyExist = _rentalContext.Customer.FirstOrDefault(x => x.Email == createCustomerModel.Email);
             if (emailAlreadyExist != null)
                 throw new ConflictException("email já cadastrado", "customer.email_already_exist");
@@ -47,9 +51,10 @@ namespace movie_rental_api.Services
             {
                 Name = createCustomerModel.Name,
                 CPF = createCustomerModel.CPF,
-                BirthDate = createCustomerModel.BirthDate,
+                BirthDate = createCustomerModel.BirthDate.Date,
                 Email = createCustomerModel.Email,
                 TelephoneNumber = createCustomerModel.TelephoneNumber,
+                CreateDate = DateTime.UtcNow.Date
             };
 
             _rentalContext.Customer.Add(customer);

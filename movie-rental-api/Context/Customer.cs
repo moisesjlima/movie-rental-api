@@ -21,5 +21,8 @@ namespace movie_rental_api.Context
 
         [JsonProperty("telephone_number")]
         public string TelephoneNumber { get; set; }
+
+        [JsonProperty("birth_date")]
+        public DateTime CreateDate { get; set; }
     }
 }

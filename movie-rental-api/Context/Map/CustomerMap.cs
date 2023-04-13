@@ -13,6 +13,7 @@ namespace movie_rental_api.Context.Map
             builder.Property(x => x.BirthDate).IsRequired();
             builder.Property(x => x.Email).IsRequired().HasMaxLength(255);
             builder.Property(x => x.TelephoneNumber).HasMaxLength(20);
+            builder.Property(x => x.CreateDate).IsRequired();
         }
     }
 }

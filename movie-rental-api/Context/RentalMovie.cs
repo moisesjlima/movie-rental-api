@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using movie_rental_api.Enums;
+using Newtonsoft.Json;
 
 namespace movie_rental_api.Context
 {
@@ -13,11 +14,14 @@ namespace movie_rental_api.Context
         [JsonProperty("customer_id")]
         public int CustomerId { get; set; }
 
+        [JsonProperty("status")]
+        public RentalMovieStatusEnum Status { get; set; }
+
         [JsonProperty("rental_start_date")]
-        public DateTime RentalStartDate { get; set; }
+        public DateTime? RentalStartDate { get; set; }
 
         [JsonProperty("rental_end_date")]
-        public DateTime RentalEndDate { get; set; }
+        public DateTime? RentalEndDate { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual Customer Customer { get; set; }

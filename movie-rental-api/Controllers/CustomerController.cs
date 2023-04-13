@@ -17,19 +17,15 @@ namespace movie_rental_api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetCustomers()
-        {
-            var customerList = _customerServices.GetCustomers();
-
-            return Ok(customerList);
-        }
-
-        [HttpGet("{name}")]
-        public async Task<ActionResult> GetCustomersByName(string name)
+        public async Task<ActionResult> GetCustomers([FromQuery] string name)
         {
             try
             {
-                var customerList = _customerServices.GetCustomersByName(name);
+                IEnumerable<Customer> customerList;
+                if (!string.IsNullOrEmpty(name))
+                    customerList = _customerServices.GetCustomersByName(name);
+                else
+                    customerList = _customerServices.GetCustomers();
 
                 return Ok(customerList);
             }

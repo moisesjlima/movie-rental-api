@@ -11,7 +11,7 @@ namespace movie_rental_api.Models
         public string TotalResults { get; set; }
 
         [JsonProperty("Response")]
-        public string Response { get; set; }
+        public bool Response { get; set; }
     }
 
     public class Search

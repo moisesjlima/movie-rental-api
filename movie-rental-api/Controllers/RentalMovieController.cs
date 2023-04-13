@@ -16,12 +16,19 @@ namespace movie_rental_api.Controllers
             _movieRentalService = movieRentalService;
         }
 
-        [HttpGet("Omdb/{movieName}")]
-        public async Task<ActionResult> GetOmdbMoviesByName(string movieName)
+        [HttpGet("Omdb")]
+        public async Task<ActionResult> GetOmdbMoviesByName([FromQuery] string movieName)
         {
-            var response = await _movieRentalService.GetOmdbMoviesByName(movieName);
+            try
+            {
+                var response = await _movieRentalService.GetOmdbMoviesByName(movieName);
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new NotFoundException(e.Message, e.Parameter));
+            }
         }
 
         [HttpGet]
@@ -56,13 +63,17 @@ namespace movie_rental_api.Controllers
         {
             try
             {
-                _movieRentalService.DeleteRentalMovie(rentalMovieId);
+                _movieRentalService.RemoveRentalMovie(rentalMovieId);
 
                 return NoContent();
             }
             catch (NotFoundException e)
             {
                 return NotFound(new NotFoundException(e.Message, e.Parameter));
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(new BadRequestException(e.Message, e.Parameter));
             }
         }
     }
