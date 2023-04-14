@@ -56,14 +56,14 @@ namespace movie_rental_api.Services
 
             var rentalMovie = _rentalContext.RentalMovie.FirstOrDefault(x => x.ImdbId == createRentalMovieModel.ImdbId);
 
-            if (rentalMovie != null)
+            if (rentalMovie != null && rentalMovie.Status != RentalMovieStatusEnum.FINISHED)
                 throw new BadRequestException("Filme já alugado", "rentalMovie.movie_already_rented");
 
             await requestOmdb(createRentalMovieModel.ImdbId);
 
-            var customerList = _rentalContext.RentalMovie.Where(x => x.CustomerId == createRentalMovieModel.CustomerId).ToList();
+            var customerMovieList = _rentalContext.RentalMovie.Where(x => x.CustomerId == createRentalMovieModel.CustomerId && x.Status != RentalMovieStatusEnum.FINISHED).ToList();
 
-            if (customerList.Count >= 2)
+            if (customerMovieList.Count >= 2)
                 throw new ForbiddenException("cliente já possui 2 filmes alugados", "customer.has_max_movies_rented");
 
             var model = new RentalMovie
@@ -95,10 +95,10 @@ namespace movie_rental_api.Services
             var rentalMovie = _rentalContext.RentalMovie.FirstOrDefault(x => x.RentalMovieId == rentalMovieId);
 
             if (rentalMovie == null)
-                throw new NotFoundException("Não foi encontrado o aluguel para exclusão", "rentalMovie.not_found");
+                throw new NotFoundException("aluguel não encontrado", "rentalMovie_notFound");
 
-            if (rentalMovie.Status != RentalMovieStatusEnum.FINISHED)
-                throw new BadRequestException("Não é possível remover o aluguel pois encontra-se ativo ou atrasado", "rentalMovie.not_allowed_to_deleted");
+            if (rentalMovie.Status == RentalMovieStatusEnum.OVERDUE)
+                throw new NotFoundException("aluguel se encontrado atrasado, não é possível encerrar a locação", "rentalMovie_cannot_be_removed");
 
             rentalMovie.Status = RentalMovieStatusEnum.FINISHED;
             _rentalContext.SaveChanges();

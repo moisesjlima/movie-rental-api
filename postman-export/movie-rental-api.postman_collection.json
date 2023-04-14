@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "684d3e8d-b6e4-4bba-ab81-2648b97c7780",
+		"_postman_id": "bfaf2674-6b1a-4afb-ba0c-f5b7e6082277",
 		"name": "movie-rental-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26082788"
@@ -127,7 +127,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:7080/v1/customer/1\n",
+							"raw": "https://localhost:7080/v1/customer/2\n",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -136,7 +136,7 @@
 							"path": [
 								"v1",
 								"customer",
-								"1\n"
+								"2\n"
 							]
 						}
 					},
@@ -273,7 +273,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7080/v1/rental-movie/search?movieName=Bruce Lee",
+							"raw": "https://localhost:7080/v1/rental-movie/search?movieName=Spider",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -287,7 +287,7 @@
 							"query": [
 								{
 									"key": "movieName",
-									"value": "Bruce Lee"
+									"value": "Spider"
 								}
 							]
 						}
@@ -320,7 +320,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7080/v1/rental-movie/2",
+							"raw": "https://localhost:7080/v1/rental-movie/4",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -329,7 +329,7 @@
 							"path": [
 								"v1",
 								"rental-movie",
-								"2"
+								"4"
 							]
 						}
 					},
@@ -342,7 +342,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"imdbId\": \"tt50384hfghfghgh\",\r\n  \"customerId\": 1,\r\n  \"rentalStartDate\": \"2023-03-13T12:42:36.436Z\",\r\n  \"rentalEndDate\": \"2023-04-14T12:42:36.436Z\"\r\n}",
+							"raw": "{\r\n  \"imdbId\": \"tt0413300\",\r\n  \"customerId\": 1,\r\n  \"rentalStartDate\": \"2023-04-13T12:42:36.436Z\",\r\n  \"rentalEndDate\": \"2023-04-14T12:42:36.436Z\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
