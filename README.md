@@ -26,4 +26,4 @@ Implementar uma api de uma locadora: para cada item criar uma rota:
 * Não pode cadastrar 2 clientes com o mesmo email e CPF, retornar HTTP Conflict Error
 * Não pode remover um cliente que tem um filme alugado, retornar HTTP Forbidden Error
 * Um filme já alugado, não pode ser alugado por outra pessoa, enquanto o aluguel não tiver sido terminado
-* Uma pessoa só pode alugar no máximo 2 filmes, enquanto não encerrar o tempo de aluguel do filme já alugado, não poderá pegar mais, retornar retornar HTTP Forbidden Error
+* Uma pessoa só pode alugar no máximo 2 filmes, enquanto não encerrar o tempo de aluguel do filme já alugado, não poderá pegar mais, retornar HTTP Forbidden Error
