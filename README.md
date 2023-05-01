@@ -22,8 +22,8 @@ Implementar uma api de uma locadora: para cada item criar uma rota:
 - Deve ser possível finalizar um aluguel de um filme: fazer um DELETE para remover a relação de cliente e filme
 
 ### RESTRIÇÕES/REGRAS DE NEGÓCIO:
-* Menores de 14 anos, não podem alugar filmes, retornar HTTP Forbidden Error
-* Não pode cadastrar 2 clientes com o mesmo email e CPF, retornar HTTP Conflict Error
-* Não pode remover um cliente que tem um filme alugado, retornar HTTP Forbidden Error
+* Menores de 14 anos, não podem alugar filmes, retornar HTTP Forbidden Error(403)
+* Não pode cadastrar 2 clientes com o mesmo email e CPF, retornar HTTP Conflict Error(409)
+* Não pode remover um cliente que tem um filme alugado, retornar HTTP Forbidden Error(403)
 * Um filme já alugado, não pode ser alugado por outra pessoa, enquanto o aluguel não tiver sido terminado
-* Uma pessoa só pode alugar no máximo 2 filmes, enquanto não encerrar o tempo de aluguel do filme já alugado, não poderá pegar mais, retornar HTTP Forbidden Error
+* Uma pessoa só pode alugar no máximo 2 filmes, enquanto não encerrar o tempo de aluguel do filme já alugado, não poderá pegar mais, retornar HTTP Forbidden Error(403)
