@@ -4,6 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>movie_rental_api</RootNamespace>
+		<NoWarn>8632;0114</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

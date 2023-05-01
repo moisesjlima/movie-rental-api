@@ -1,4 +1,5 @@
-﻿using movie_rental_api.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using movie_rental_api.Context;
 using movie_rental_api.Enums;
 using movie_rental_api.Exceptions;
 using movie_rental_api.Models;
@@ -32,9 +33,9 @@ namespace movie_rental_api.Services
             return response;
         }
 
-        public IEnumerable<RentalMovie> GetRentalMovies()
+        public async Task< IEnumerable<RentalMovie>> GetRentalMovies()
         {
-            var rentalMovieList = _rentalContext.RentalMovie.ToList();
+            var rentalMovieList = await _rentalContext.RentalMovie.ToListAsync();
 
             return rentalMovieList;
         }
@@ -76,7 +77,7 @@ namespace movie_rental_api.Services
             };
 
             _rentalContext.Add(model);
-            _rentalContext.SaveChanges();
+            await _rentalContext.SaveChangesAsync();
 
             return model;
         }
@@ -90,7 +91,7 @@ namespace movie_rental_api.Services
                 throw new BadRequestException("filme não encontrado pelo id para locação", "rentalMovie.not_found");
         }
 
-        public void RemoveRentalMovie(int rentalMovieId)
+        public async Task RemoveRentalMovie(int rentalMovieId)
         {
             var rentalMovie = _rentalContext.RentalMovie.FirstOrDefault(x => x.RentalMovieId == rentalMovieId);
 
@@ -101,7 +102,7 @@ namespace movie_rental_api.Services
                 throw new NotFoundException("aluguel se encontrado atrasado, não é possível encerrar a locação", "rentalMovie_cannot_be_removed");
 
             rentalMovie.Status = RentalMovieStatusEnum.FINISHED;
-            _rentalContext.SaveChanges();
+            await _rentalContext.SaveChangesAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using movie_rental_api.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using movie_rental_api.Context;
 using movie_rental_api.Enums;
 using movie_rental_api.Exceptions;
 using movie_rental_api.Models;
@@ -13,38 +14,38 @@ namespace movie_rental_api.Services
             _rentalContext = rentalContext;
         }
 
-        public IEnumerable<Customer> GetCustomers()
+        public async Task<IEnumerable<Customer>> GetCustomers()
         {
-            var customerList = _rentalContext.Customer.ToList();
+            var customerList = await _rentalContext.Customer.ToListAsync();
 
             return customerList;
         }
 
-        public IEnumerable<Customer> GetCustomersByName(string name)
+        public async Task<IEnumerable<Customer>> GetCustomersByName(string name)
         {
-            var customerList = _rentalContext.Customer.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
+            var customerList = await _rentalContext.Customer.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToListAsync();
             if (customerList.Count <= 0)
                 throw new NotFoundException("nenhum cliente encontrado pelo nome", "customer.not_found");
 
             return customerList;
         }
 
-        public Customer GetCustomerById(int customerId)
+        public async Task<Customer> GetCustomerById(int customerId)
         {
-            var customer = _rentalContext.Customer.FirstOrDefault(x => x.CustomerId == customerId);
+            var customer = await _rentalContext.Customer.FirstOrDefaultAsync(x => x.CustomerId == customerId);
             if (customer == null)
                 throw new NotFoundException("nenhum cliente encontrado pelo id", "customer.not_found");
 
             return customer;
         }
 
-        public Customer CreateCustomer(CreateCustomerModel createCustomerModel)
+        public async Task<Customer> CreateCustomer(CreateCustomerModel createCustomerModel)
         {
-            var cpfAlreadyExist = _rentalContext.Customer.FirstOrDefault(x => x.CPF == createCustomerModel.CPF);
+            var cpfAlreadyExist = await _rentalContext.Customer.FirstOrDefaultAsync(x => x.CPF == createCustomerModel.CPF);
             if (cpfAlreadyExist != null)
                 throw new ConflictException("cpf já cadastrado", "customer.cpf_already_exist");
 
-            var emailAlreadyExist = _rentalContext.Customer.FirstOrDefault(x => x.Email == createCustomerModel.Email);
+            var emailAlreadyExist = await _rentalContext.Customer.FirstOrDefaultAsync(x => x.Email == createCustomerModel.Email);
             if (emailAlreadyExist != null)
                 throw new ConflictException("email já cadastrado", "customer.email_already_exist");
 
@@ -58,34 +59,34 @@ namespace movie_rental_api.Services
                 CreateDate = DateTime.UtcNow.Date
             };
 
-            _rentalContext.Customer.Add(customer);
+            await _rentalContext.Customer.AddAsync(customer);
 
-            _rentalContext.SaveChanges();
+            await _rentalContext.SaveChangesAsync();
 
             return customer;
         }
 
-        public Customer UpdateCustomerTelephoneNumber(UpdateCustomerPhoneNumberModel updateCustomerNumberModel)
+        public async Task<Customer> UpdateCustomerTelephoneNumber(UpdateCustomerPhoneNumberModel updateCustomerNumberModel)
         {
-            var customer = GetCustomerById(updateCustomerNumberModel.CustomerId);
+            var customer = await GetCustomerById(updateCustomerNumberModel.CustomerId);
 
             customer.TelephoneNumber = updateCustomerNumberModel.TelephoneNumber;
-            _rentalContext.SaveChanges();
+            await _rentalContext.SaveChangesAsync();
 
             return customer;
         }
 
-        public void DeleteCustomer(int customerId)
+        public async Task DeleteCustomer(int customerId)
         {
-            var customer = GetCustomerById(customerId);
+            var customer = await GetCustomerById(customerId);
 
-            var customerMovieRent = _rentalContext.RentalMovie.Any(x => x.CustomerId == customer.CustomerId && x.Status != RentalMovieStatusEnum.FINISHED);
+            var customerMovieRent = await _rentalContext.RentalMovie.AnyAsync(x => x.CustomerId == customer.CustomerId && x.Status != RentalMovieStatusEnum.FINISHED);
 
             if (customerMovieRent)
                 throw new ForbiddenException("Cliente possui filme alugado, não é possivel deletar", "customer.cannot_be_deleted");
 
             _rentalContext.Remove(customer);
-            _rentalContext.SaveChanges();
+            await _rentalContext.SaveChangesAsync();
         }
     }
 }

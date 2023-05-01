@@ -34,7 +34,7 @@ namespace movie_rental_api.Controllers
         [HttpGet]
         public async Task<ActionResult> GetRentalMovies()
         {
-            var response = _movieRentalService.GetRentalMovies();
+            var response = await _movieRentalService.GetRentalMovies();
 
             return Ok(response);
         }
@@ -63,7 +63,7 @@ namespace movie_rental_api.Controllers
         {
             try
             {
-                _movieRentalService.RemoveRentalMovie(rentalMovieId);
+                await _movieRentalService.RemoveRentalMovie(rentalMovieId);
 
                 return NoContent();
             }

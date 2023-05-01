@@ -24,11 +24,18 @@ namespace movie_rental_api.Controllers
                 IEnumerable<Customer> customerList;
 
                 if (!string.IsNullOrEmpty(name))
-                    customerList = _customerServices.GetCustomersByName(name);
+                    customerList = await _customerServices.GetCustomersByName(name);
                 else
-                    customerList = _customerServices.GetCustomers();
+                    customerList = await _customerServices.GetCustomers();
 
-                return Ok(customerList);
+                if(customerList.Count() <= 0)
+                {
+                    return NotFound("nenhum cliente encontrado");
+                }
+                else
+                {
+                    return Ok(customerList);
+                }
             }
             catch (NotFoundException e)
             {
@@ -41,7 +48,7 @@ namespace movie_rental_api.Controllers
         {
             try
             {
-                var customerList = _customerServices.GetCustomerById(customerId);
+                var customerList = await _customerServices.GetCustomerById(customerId);
 
                 return Ok(customerList);
             }
@@ -56,7 +63,7 @@ namespace movie_rental_api.Controllers
         {
             try
             {
-                var customer = _customerServices.CreateCustomer(createCustomerModel);
+                var customer = await _customerServices.CreateCustomer(createCustomerModel);
 
                 return Created($"v1/customer/{customer.CustomerId}", customer);
             }
@@ -75,7 +82,7 @@ namespace movie_rental_api.Controllers
                 if (customerId != updateCustomerNumberModel.CustomerId)
                     return BadRequest(new BadRequestException("id da uri diferente do passado no corpo", "customer.bad_request"));
 
-                var customer = _customerServices.UpdateCustomerTelephoneNumber(updateCustomerNumberModel);
+                var customer = await _customerServices.UpdateCustomerTelephoneNumber(updateCustomerNumberModel);
 
                 return Ok(customer);
             }
@@ -90,7 +97,7 @@ namespace movie_rental_api.Controllers
         {
             try
             {
-                _customerServices.DeleteCustomer(customerId);
+                await _customerServices.DeleteCustomer(customerId);
 
                 return NoContent();
             }
